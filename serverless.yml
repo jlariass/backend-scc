@@ -1,0 +1,63 @@
+
+
+service: ${self:custom.module-name}
+frameworkVersion: '2'
+provider:
+  name: aws
+  runtime: nodejs12.x
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+custom:
+  module-name: scc
+  serverless-offline:
+    httpPort: 3001
+    lambdaPort: 3100
+    noPrependStageInUrl: true
+
+functions:
+  book:
+    handler: app/index.handler
+    name: 'book'
+    events:
+      - http:
+          path: /book
+          method: GET
+          cors:
+            origin: '*'
+      - http:
+          path: /book/{id}
+          method: get
+          cors:
+            origin: '*'
+      - http:
+          path: /book/paginated
+          method: get
+          cors:
+            origin: '*'
+      - http:
+          path: /book/atrributed
+          method: get
+          cors:
+            origin: '*'
+      - http:
+          path: /book
+          method: post
+          cors:
+            origin: '*'
+      - http:
+          path: /book/{id}
+          method: put
+          cors:
+            origin: '*'
+      - http:
+          path: /book/{id}
+          method: delete
+          cors:
+            origin: '*'
+
+
+
+
+
+
