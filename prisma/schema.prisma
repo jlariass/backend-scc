@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model book {
+  id            Int    @id(map: "pk_book_id") @default(autoincrement()) @map("book_id")
+  description   String?   @db.VarChar(500) @map("book_description")
+  name          String?   @db.VarChar(500) @map("book_name")
+  creation_date DateTime  @default(now()) @db.Timestamp(6) @map("book_creation_date")
+  update_date   DateTime  @default(now()) @db.Timestamp(6) @map("book_update_date")
+  delete_date   DateTime? @db.Timestamp(6) @map("book_delete_date")
+  author_id     Int? @map("book_author_id")
+  author             author?   @relation(fields: [author_id], references: [author_id], onDelete: NoAction, map: "fk_author_id")
+
+  @@index([delete_date], map: "book_delete_date_idx")
+}
+
+model author {
+  author_id            Int    @id(map: "pk_author_id") @default(autoincrement())
+  author_first_name    String?   @db.VarChar(500)
+  author_creation_date DateTime  @default(now()) @db.Timestamp(6)
+  author_update_date   DateTime  @default(now()) @db.Timestamp(6)
+  author_delete_date   DateTime? @db.Timestamp(6)
+  author_last_name     String?   @db.VarChar(500)
+  book                 book[]
+
+  @@index([author_delete_date], map: "author_delete_date_idx")
+}
